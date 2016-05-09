@@ -1,14 +1,16 @@
-var Express = require('express');
-var webpack = require('webpack');
+'use strict';
 
-var config = require('../src/config');
-var webpackConfig = require('./dev.config');
-var compiler = webpack(webpackConfig);
+const Express = require('express');
+const webpack = require('webpack');
 
-var host = config.host || 'localhost';
-var port = (Number(config.port) + 1) || 3001;
-var serverOptions = {
-  contentBase: 'http://' + host + ':' + port,
+const config = require('../src/config');
+const webpackConfig = require('./dev.config');
+const compiler = webpack(webpackConfig);
+
+const host = config.host || 'localhost';
+const port = (+config.port + 1) || 3001;
+const serverOptions = {
+  contentBase: `http://${host}:${port}`,
   quiet: true,
   noInfo: true,
   hot: true,
@@ -19,7 +21,7 @@ var serverOptions = {
   stats: {colors: true}
 };
 
-var app = new Express();
+const app = new Express();
 
 app.use(require('webpack-dev-middleware')(compiler, serverOptions));
 app.use(require('webpack-hot-middleware')(compiler));
@@ -28,6 +30,6 @@ app.listen(port, function onAppListening(err) {
   if (err) {
     console.error(err);
   } else {
-    console.info('==> 🚧  Webpack development server listening on port %s', port);
+    console.info(`==> 🚧  Webpack development server listening on port ${port}`);
   }
 });

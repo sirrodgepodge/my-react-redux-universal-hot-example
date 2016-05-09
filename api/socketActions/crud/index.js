@@ -1,4 +1,4 @@
-import * as actionTypes from '../../../src/redux/actionTypes';
+import * as actionTypes from '../../../src/shared/redux/actionTypes';
 
 
 export default socket => {

@@ -3,7 +3,7 @@ const bufferSize = 100;
 const messageBuffer = new Array(bufferSize);
 let messageIndex = 0;
 
-export default socket => {
+export default (socket, io) => {
   socket.emit('news', {msg: `'Hello World!' from server`});
 
   socket.on('history', () => {
@@ -16,10 +16,10 @@ export default socket => {
     }
   });
 
-  socket.on('msg', (data) => {
+  socket.on('msg', data => {
     data.id = messageIndex;
     messageBuffer[messageIndex % bufferSize] = data;
     messageIndex++;
     io.emit('msg', data);
   });
-}
+};
