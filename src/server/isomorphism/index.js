@@ -9,7 +9,7 @@ import PrettyError from 'pretty-error';
 const pretty = new PrettyError();
 
 // classes
-import Html from '../../shared/lib/Html';
+import Html from '../../shared/Html';
 import ApiClient from '../../shared/lib/ApiClient';
 
 // functions

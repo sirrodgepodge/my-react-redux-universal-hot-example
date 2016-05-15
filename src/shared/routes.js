@@ -1,17 +1,20 @@
 import React from 'react';
 import {IndexRoute, Route} from 'react-router';
+
+// utility function
 import authedRoute from './lib/authedRoute';
-import {
-    App,
-    Chat,
-    Home,
-    Widgets,
-    About,
-    Login,
-    LoginSuccess,
-    Survey,
-    NotFound,
-  } from './containers';
+
+// components
+import App from './App';
+import Chat from './react/r_Chat';
+import Home from './react/f_Home';
+import Widgets from './react/r_Widgets';
+import About from './react/c_About';
+import Login from './react/r_Login';
+import LoginSuccess from './react/r_LoginSuccess';
+import Survey from './react/r_Survey';
+import NotFound from './react/f_NotFound';
+
 
 export default store => (
   <Route path='/' component={App}>
