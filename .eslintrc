@@ -38,6 +38,7 @@
     "no-sequences": 0,
     "padded-blocks": 0,
     "lines-around-comment": 0,
+    "id-length": 0,
     "react/jsx-no-bind": 0,
     "react/jsx-indent-props": 0,
     "react/jsx-closing-bracket-location": 0,

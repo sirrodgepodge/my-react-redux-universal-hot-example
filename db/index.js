@@ -1,5 +1,9 @@
 import mongoose from 'mongoose';
+import Promise from 'bluebird';
 import chalk from 'chalk';
+
+// make mongoose use bluebird promises
+mongoose.Promise = Promise;
 
 // begins connecting to mongo with connection string and gives us "connection" to listen to for events
 const URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/universalHotExample';

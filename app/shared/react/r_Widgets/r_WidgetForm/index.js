@@ -4,6 +4,7 @@ import {bindActionCreators} from 'redux';
 import {reduxForm} from 'redux-form';
 import validate, {colors} from './validate';
 import * as widgetActions from 'shared/redux/reducers/widgets';
+import _ from 'lodash';
 
 
 @connect(
@@ -19,6 +20,7 @@ import * as widgetActions from 'shared/redux/reducers/widgets';
 })
 export default class WidgetForm extends Component {
   static propTypes = {
+    _id: PropTypes.string,
     fields: PropTypes.object.isRequired,
     editStop: PropTypes.func.isRequired,
     handleSubmit: PropTypes.func.isRequired,
@@ -32,12 +34,28 @@ export default class WidgetForm extends Component {
   };
 
   render() {
-    const { editStop, fields: {id, color, sprocketCount, owner}, formKey, handleSubmit, invalid,
-      pristine, save, submitting, saveError: { [formKey]: saveError }, values } = this.props;
+    const {
+      _id, // for some reason this doesn't come through fields
+      editStop,
+      fields: {
+        color,
+        sprocketCount,
+        owner
+      },
+      formKey,
+      handleSubmit,
+      invalid,
+      pristine,
+      save,
+      submitting,
+      saveError: {
+        [formKey]: saveError
+      },
+      values } = this.props;
     const styles = require('../style.scss');
     return (
       <tr className={submitting ? styles.saving : ''}>
-        <td className={styles.idCol}>{id.value}</td>
+        <td className={styles.idCol}>{_id}</td>
         <td className={styles.colorCol}>
           <select name='color' className='form-control' {...color}>
             {colors.map(valueColor => <option value={valueColor} key={valueColor}>{valueColor}</option>)}
@@ -60,7 +78,7 @@ export default class WidgetForm extends Component {
           </button>
           <button className='btn btn-success'
                   onClick={
-                    handleSubmit(() => save(values)
+                    handleSubmit(() => save(_.merge({_id}, values))
                       .then(result => result && typeof result.error === 'object' &&
                         Promise.reject(result.error)))
                   }

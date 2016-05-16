@@ -7,9 +7,14 @@ import mapUrl from 'utils/mapUrl';
 import PrettyError from 'pretty-error';
 import http from 'http';
 import SocketIo from 'socket.io';
+import dotenv from 'dotenv';
+import requireDir from 'require-dir';
 
 const pretty = new PrettyError();
 const api = express();
+
+// attach environmental vars from ".env" file to process.env
+dotenv.config();
 
 const server = new http.Server(api);
 
@@ -24,6 +29,10 @@ api.use(session({
 }));
 api.use(bodyParser.json());
 
+const crudRequire = requireDir('./crud', {recurse: true});
+Object.keys(crudRequire).forEach(folderName => {
+  crudRequire[folderName].index(api);
+});
 
 api.use((req, res) => {
   const splitUrlPath = req.url.split('?')[0].split('/').slice(1);

@@ -54,7 +54,7 @@ export default class Widgets extends Component {
             editing,
             loading,
             load } = this.props;
-    const handleEdit = widget => () => editStart(`${widget.id}`);
+    const handleEdit = widget => () => editStart(`${widget._id}`);
 
     console.log(error);
 
@@ -100,10 +100,10 @@ export default class Widgets extends Component {
             </thead>
             <tbody>
             {
-              widgets.map(widget => editing[widget.id] ?
-                <WidgetForm formKey={String(widget.id)} key={String(widget.id)} initialValues={widget}/> :
-                <tr key={widget.id}>
-                  <td className={styles.idCol}>{widget.id}</td>
+              widgets.map(widget => editing[widget._id] ?
+                <WidgetForm _id={widget._id} formKey={String(widget._id)} key={String(widget._id)} initialValues={widget}/> :
+                <tr key={widget._id}>
+                  <td className={styles.idCol}>{widget._id}</td>
                   <td className={styles.colorCol}>{widget.color}</td>
                   <td className={styles.sprocketsCol}>{widget.sprocketCount}</td>
                   <td className={styles.ownerCol}>{widget.owner}</td>

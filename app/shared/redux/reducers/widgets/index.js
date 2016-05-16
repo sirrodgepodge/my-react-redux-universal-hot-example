@@ -83,7 +83,7 @@ export function isLoaded(globalState) {
 export function load() {
   return {
     type: actionTypes.LOAD,
-    promise: client => client.get('/widgets/load/param1/param2') // params not used, just shown as demonstration
+    promise: client => client.get('/widget') // params not used, just shown as demonstration
   };
 }
 
@@ -91,7 +91,7 @@ export function save(widget) {
   return {
     type: actionTypes.SAVE,
     id: widget.id,
-    promise: client => client.post('/widgets/update', {
+    promise: client => client.put('/widget', {
       data: widget
     })
   };
