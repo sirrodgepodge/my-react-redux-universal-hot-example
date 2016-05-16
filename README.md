@@ -59,7 +59,7 @@ The first time it may take a little while to generate the first `webpack-assets.
 - <kbd>CTRL</kbd>+<kbd>Q</kbd> Move DevTools Dock Position
 - see [redux-devtools-dock-monitor](https://github.com/gaearon/redux-devtools-dock-monitor) for more detailed information.
 
-If you have the 
+If you have the
 [Redux DevTools chrome extension](https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd) installed it will automatically be used on the client-side instead.
 
 If you want to disable the dev tools during development, set `__DEVTOOLS__` to `false` in `/webpack/dev.config.js`.  
@@ -106,7 +106,7 @@ We also spit out the `redux` state into a global `window.__data` variable in the
 
 #### Server-side Data Fetching
 
-The [redux-async-connect](https://www.npmjs.com/package/redux-async-connect) package exposes an API to return promises that need to be fulfilled before a route is rendered. It exposes a `<ReduxAsyncConnect />` container, which wraps our render tree on both [server](https://github.com/erikras/react-redux-universal-hot-example/blob/master/src/server.js) and [client](https://github.com/erikras/react-redux-universal-hot-example/blob/master/src/client.js). More documentation is available on the [redux-async-connect](https://www.npmjs.com/package/redux-async-connect) page.
+The [redux-async-connect](https://www.npmjs.com/package/redux-async-connect) package exposes an API to return promises that need to be fulfilled before a route is rendered. It exposes a `<ReduxAsyncConnect />` container, which wraps our render tree on both [server](https://github.com/erikras/react-redux-universal-hot-example/blob/master/app/server.js) and [client](https://github.com/erikras/react-redux-universal-hot-example/blob/master/app/client.js). More documentation is available on the [redux-async-connect](https://www.npmjs.com/package/redux-async-connect) page.
 
 #### Client Side
 
@@ -114,14 +114,14 @@ The client side entry point is reasonably named `client.js`. All it does is load
 
 #### Redux Middleware
 
-The middleware, [`clientMiddleware.js`](https://github.com/erikras/react-redux-universal-hot-example/blob/master/src/redux/middleware/clientMiddleware.js), serves two functions:
+The middleware, [`clientMiddleware.js`](https://github.com/erikras/react-redux-universal-hot-example/blob/master/app/redux/middleware/clientMiddleware.js), serves two functions:
 
 1. To allow the action creators access to the client API facade. Remember this is the same on both the client and the server, and cannot simply be `import`ed because it holds the cookie needed to maintain session on server-to-server requests.
 2. To allow some actions to pass a "promise generator", a function that takes the API client and returns a promise. Such actions require three action types, the `REQUEST` action that initiates the data loading, and a `SUCCESS` and `FAILURE` action that will be fired depending on the result of the promise. There are other ways to accomplish this, some discussed [here](https://github.com/rackt/redux/issues/99), which you may prefer, but to the author of this example, the middleware way feels cleanest.
 
 #### Redux Modules... *What the Duck*?
 
-The `src/redux/modules` folder contains "modules" to help
+The `app/redux/modules` folder contains "modules" to help
 isolate concerns within a Redux application (aka [Ducks](https://github.com/erikras/ducks-modular-redux), a Redux Style Proposal that I came up with). I encourage you to read the
 [Ducks Docs](https://github.com/erikras/ducks-modular-redux) and provide feedback.
 
@@ -199,7 +199,7 @@ require('aModule/dist/style.css');
 ...
 ```
 
-**NOTE** In order to use this method with **scss or less** files one more modification must be made. In both `dev.config.js` and `prod.config.js` in the loaders for less and scss files remove 
+**NOTE** In order to use this method with **scss or less** files one more modification must be made. In both `dev.config.js` and `prod.config.js` in the loaders for less and scss files remove
 
 1. `modules`
 2. `localIdentName...`
@@ -227,9 +227,9 @@ To keep watching your test suites that you are working on, just set `singleRun: 
 
 To get this project to work on Heroku, you need to:
 
-1. Remove the `"PORT": 8080` line from the `betterScripts` / `start-prod` section of `package.json`.
+<!-- 1. Remove the `"PORT": 8080` line from the `betterScripts` / `start-prod` section of `package.json`. // not needed anymore -->
 2. `heroku config:set NODE_ENV=production`
-3. `heroku config:set NODE_PATH=./src`
+3. `heroku config:set NODE_PATH=./app`
 4. `heroku config:set NPM_CONFIG_PRODUCTION=false`
   * This is to enable webpack to run the build on deploy.
 
@@ -240,18 +240,18 @@ The first deploy might take a while, but after that your `node_modules` dir shou
 This project moves fast and has an active community, so if you have a question that is not answered below please visit our [Discord channel](https://discord.gg/0ZcbPKXt5bZZb1Ko) or file an issue.
 
 
-## Roadmap 
+## Roadmap
 
-Although this isn't a library, we recently started versioning to make it easier to track breaking changes and emerging best practices. 
+Although this isn't a library, we recently started versioning to make it easier to track breaking changes and emerging best practices.
 
 * [Inline Styles](docs/InlineStyles.md) - CSS is dead
 
 ## Contributing
 
-I am more than happy to accept external contributions to the project in the form of feedback, bug reports and even better - pull requests :) 
+I am more than happy to accept external contributions to the project in the form of feedback, bug reports and even better - pull requests :)
 
-If you would like to submit a pull request, please make an effort to follow the guide in [CONTRIBUTING.md](CONTRIBUTING.md). 
- 
+If you would like to submit a pull request, please make an effort to follow the guide in [CONTRIBUTING.md](CONTRIBUTING.md).
+
 ---
 Thanks for checking this out.
 

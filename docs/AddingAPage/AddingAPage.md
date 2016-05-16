@@ -20,7 +20,7 @@ Looking with `ick about` and ignoring documentation, the word *about* appears in
 A new page requires new page renderer.  Copy the About page to a 
 new directory and trim out almost all of it:
 
-*  `cd ./src/containers && mkdir ./Hello` because each container goes in its own 
+*  `cd ./app/containers && mkdir ./Hello` because each container goes in its own 
     directory by convention.
 *  `cp About/About.js Hello/Hello.js`
 
@@ -32,7 +32,7 @@ Edit `Hello/Hello.js` into this file:
 
 ## Edit three files to add Hello
 
-#### Add to `./src/containers/index.js` to include and export the React component:
+#### Add to `./app/containers/index.js` to include and export the React component:
 
 ![Edit index.js](edit_index.png)
 
@@ -41,7 +41,7 @@ Edit `Hello/Hello.js` into this file:
 ![Edit routes.js 1](edit_route1.png)
 ![Edit routes.js 2](edit_route2.png)
 
-#### Add to `./src/containers/App/App.js` to add "Hello" to the NavBar
+#### Add to `./app/containers/App/App.js` to add "Hello" to the NavBar
 
 ![Edit App.js](edit_app.png)
 
@@ -56,21 +56,21 @@ The task of adding a new page exemplifies two trade-offs in the kit:
 
 Convention is a set of constraining rules that automatically trigger
 routine configuration tasks.  For example, WebPack automatically picked up the 
-new directory `./src/containers/Hello` without adding to any configuration files.
+new directory `./app/containers/Hello` without adding to any configuration files.
 
-On the other hand, routine code was added to `./src/containers/index.js` and 
-`./src/routes.js` to handle the new page.  A convention could automatically
+On the other hand, routine code was added to `./app/containers/index.js` and 
+`./app/routes.js` to handle the new page.  A convention could automatically
 accomplish the same tasks at either compile or run time.  The cost is new 
 constraints, such as requiring `Hello/Hello.js` to be renamed
 `HelloPage/HelloPage.js`.
 
 Following a style in the code that has no automatic effects is just organic
-growth, not convention.  For example, developers reading `./src/containers/index.js`
+growth, not convention.  For example, developers reading `./app/containers/index.js`
 must stop and figure out why all subdirectories except `DevTools` are exported.
-(`DevTools`)[`./src/containers/DevTools/DevTools.js`](https://github.com/erikras/react-redux-universal-hot-example/blob/master/src/containers/DevTools/DevTools.js)
+(`DevTools`)[`./app/containers/DevTools/DevTools.js`](https://github.com/erikras/react-redux-universal-hot-example/blob/master/app/containers/DevTools/DevTools.js)
 contains a single function which should be
 [randomly](https://github.com/erikras/react-redux-universal-hot-example/issues/808)
-moved to `./src/utils` or `./src/helpers`.  Using a convention rule that all 
+moved to `./app/utils` or `./app/helpers`.  Using a convention rule that all 
 containers must contain an exported React component would raise an error.
 Organic growth leads to disorder in a project.
 

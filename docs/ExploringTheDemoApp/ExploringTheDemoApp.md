@@ -18,7 +18,7 @@ The project hosts a running demo on Heroku, a hosting company.  Open
 
 Much of the text is cut-and-paste from the project's 
 [README.md](https://github.com/erikras/react-redux-universal-hot-example/blob/master/README.md) file into 
-the code for this page [./src/containers/Home/Home.js](https://github.com/erikras/react-redux-universal-hot-example/blob/master/src/containers/Home/Home.js).  
+the code for this page [./app/containers/Home/Home.js](https://github.com/erikras/react-redux-universal-hot-example/blob/master/app/containers/Home/Home.js).  
 
 The text provides a one line overview of about twenty of the main 
 modules of hundreds shown during installation.   The selection 
@@ -52,17 +52,17 @@ Try clicking on the 'Initialize Form' button and then hitting Submit.  You will 
 the name and the email.  Even with a good kit, forms can be difficult to code.
 
 ![Screenshot with Annotations](survey_markup.png)
-[scont]: https://github.com/erikras/react-redux-universal-hot-example/tree/master/src/containers/Survey
-[scomp]: https://github.com/erikras/react-redux-universal-hot-example/tree/master/src/components/SurveyForm
-[conlist]: https://github.com/erikras/react-redux-universal-hot-example/blob/master/src/containers/index.js
-[complist]: https://github.com/erikras/react-redux-universal-hot-example/blob/master/src/components/index.js
-[routes]: https://github.com/erikras/react-redux-universal-hot-example/blob/master/src/routes.js
-[app]: https://github.com/erikras/react-redux-universal-hot-example/tree/master/src/containers/App/App.js
+[scont]: https://github.com/erikras/react-redux-universal-hot-example/tree/master/app/containers/Survey
+[scomp]: https://github.com/erikras/react-redux-universal-hot-example/tree/master/app/components/SurveyForm
+[conlist]: https://github.com/erikras/react-redux-universal-hot-example/blob/master/app/containers/index.js
+[complist]: https://github.com/erikras/react-redux-universal-hot-example/blob/master/app/components/index.js
+[routes]: https://github.com/erikras/react-redux-universal-hot-example/blob/master/app/routes.js
+[app]: https://github.com/erikras/react-redux-universal-hot-example/tree/master/app/containers/App/App.js
 
 ### Explore the About Page
 
 Click on the *About* link.   The source for this page 
-[./src/containers/About/About.js](https://github.com/erikras/react-redux-universal-hot-example/blob/master/src/containers/About/About.js)
+[./app/containers/About/About.js](https://github.com/erikras/react-redux-universal-hot-example/blob/master/app/containers/About/About.js)
 uses a casual mix of HTML, ECMA7 JavaScript, and React components.   This translates into 
 simple JavaScript code for the browser.   Notice how the local state `showKitten` being false causes no
 `div` or `img` tag in the output.
@@ -72,7 +72,7 @@ simple JavaScript code for the browser.   Notice how the local state `showKitten
 ### Explore the Login Page
 
 Finally, click on the *Login* page and explore.   Looking at the styling for this page 
-[./src/containers/Login/Login.scss]](https://github.com/erikras/react-redux-universal-hot-example/blob/master/src/containers/Login/Login.scss)
+[./app/containers/Login/Login.scss]](https://github.com/erikras/react-redux-universal-hot-example/blob/master/app/containers/Login/Login.scss)
 will show an example of how the using styling files litters the code base with extra files.   
 Consider the alternative of using 
 [Inline Styles](https://github.com/erikras/react-redux-universal-hot-example/blob/master/docs/InlineStyles.md).

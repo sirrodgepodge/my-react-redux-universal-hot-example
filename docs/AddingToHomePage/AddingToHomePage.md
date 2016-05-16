@@ -16,7 +16,7 @@ First, find the correct file to change by walking through the kit's directory tr
 
 ![Finding The Home Page 4](find_home4.png)
 
-So, the likely file is `src/containers/Home/Home.js`.
+So, the likely file is `app/containers/Home/Home.js`.
 
 ## Start the server and open the browser
 
@@ -27,8 +27,8 @@ and [better-npm-run](https://www.npmjs.com/package/better-npm-run), runs
  `./webpack/webpack-dev-server.js` on port 3001; runs `./bin/server.js` for HTTP on port 3000; 
  and runs `./bin/api.js` for the REST API on port 3030.
   
-* `./bin/server.js` calls `./src/server.js` and uses the [HMR plugin](http://andrewhfarmer.com/webpack-hmr-tutorial/)
-for hot reloading, meaning the browser refreshes automatically when any file in `./src` is changed.
+* `./bin/server.js` calls `./app/server.js` and uses the [HMR plugin](http://andrewhfarmer.com/webpack-hmr-tutorial/)
+for hot reloading, meaning the browser refreshes automatically when any file in `./app` is changed.
 
 * `./webpack/webpack-dev-server` does teh actual compilation with the 
 [webpack dev middleware package](https://github.com/webpack/webpack-dev-middleware) to provide a key feature found
@@ -40,12 +40,12 @@ other JSON objects.
 
 ## Change the text
 
-Add the static text to (`src/containers/Home/Home.js`):
+Add the static text to (`app/containers/Home/Home.js`):
 
 ![Add Hello Header to Home](add_home.png)
 
 
-When you save the file to disk, the change to the `./src` directory is picked up by the 
+When you save the file to disk, the change to the `./app` directory is picked up by the 
 [piping](https://www.npmjs.com/package/piping) module, triggering the webpack-dev-server to rebuild 
 `./static/dist/[checksum].js`, and triggering a stub injected into the HTML file served to the browser to 
 reload.   The rebuilding processes through webpack middleware and plugins that compile `*.sccs` files, 

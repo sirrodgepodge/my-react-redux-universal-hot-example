@@ -4,13 +4,13 @@ Chances are, once you get comfortable with this setup, you'll want to hook into 
 
 ## Update `package.json`
 
-First things first, you need to add `APIHOST` settings in `package.json`. If you look in `src/config.js`, you'll see that it's already configured to read this `APIHOST` setting if it's present.
+First things first, you need to add `APIHOST` settings in `package.json`. If you look in `app/config.js`, you'll see that it's already configured to read this `APIHOST` setting if it's present.
 
 If the port you use differs between your dev & prod API hosts, you may want to get rid of the `APIPORT` setting, including it right in `APIHOST`. Same with the protocol – if you use HTTP in dev but HTTPS in prod, you may want to include the protocol right in `APIHOST`, and then get rid of the explicit `"http://"` found in the next section.
 
 ## Update `ApiClient`
 
-Open up `src/helpers/ApiClient.js`. You'll see this line:
+Open up `app/helpers/ApiClient.js`. You'll see this line:
 
 ``` javascript
    if (__SERVER__) {
@@ -27,7 +27,7 @@ Why do you need a proxy? So that the `APIHOST` can be set as part of the Node en
 
 ## Update `server.js`
 
-To update the proxy, find this chunk in `src/server.js`:
+To update the proxy, find this chunk in `app/server.js`:
 
 ``` javascript
   const proxy = httpProxy.createProxyServer({

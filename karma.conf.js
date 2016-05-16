@@ -41,7 +41,7 @@ module.exports = function (config) {
       },
       resolve: {
         modulesDirectories: [
-          'src',
+          'app',
           'node_modules'
         ],
         extensions: ['', '.json', '.js']
