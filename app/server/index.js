@@ -31,9 +31,9 @@ if (config.port) {
   server.listen(config.port, err => {
     if (err)
       pretty.render(err);
-      
-    console.info('----\n==> ✅  %s is running, talking to API server on %s.', config.app.title, config.apiPort);
-    console.info('==> 💻  Open http://%s:%s in a browser to view the app.', config.host, config.port);
+
+    console.info(`----\n==> ✅  ${config.app.title} is running on ${config.port}, talking to API server on ${config.apiPort}.`);
+    console.info(`==> 💻  Open http://${config.host}:${config.port} in a browser to view the app.`);
   });
 } else {
   console.error('==>     ERROR: No PORT environment variable has been specified');

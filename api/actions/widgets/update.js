@@ -1,4 +1,6 @@
 import load from './load';
+import mongoose from 'mongoose';
+const Widget = mongoose.model('Widget');
 
 export default function update(req) {
   return new Promise((resolve, reject) => {

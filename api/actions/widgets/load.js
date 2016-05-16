@@ -1,9 +1,19 @@
+import mongoose from 'mongoose';
+const Widget = mongoose.model('Widget');
+
 const initialWidgets = [
   {id: 1, color: 'Red', sprocketCount: 7, owner: 'John'},
   {id: 2, color: 'Taupe', sprocketCount: 1, owner: 'George'},
   {id: 3, color: 'Green', sprocketCount: 8, owner: 'Ringo'},
   {id: 4, color: 'Blue', sprocketCount: 2, owner: 'Paul'}
 ];
+
+// seed data if none exists
+Widget.find().then((widgetsArr) => {
+  if(!widgetsArr.length)
+    Widget.create(initialWidgets);
+});
+
 
 export function getWidgets(req) {
   let widgets = req.session.widgets;
