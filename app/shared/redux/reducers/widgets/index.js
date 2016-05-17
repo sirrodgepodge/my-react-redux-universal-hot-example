@@ -1,5 +1,5 @@
 import * as actionTypes from '../../actionTypes';
-
+import _ from 'lodash';
 
 const initialState = {
   loaded: false,
@@ -50,17 +50,17 @@ export default function reducer(state = initialState, action = {}) {
       return state; // 'saving' flag handled by redux-form
     case `${actionTypes.SAVE}_SUCCESS`:
       const data = [...state.data];
-      data[action.result.id - 1] = action.result;
+      _.merge(data.filter(datum => datum._id === action.result._id)[0], action.result);
       return {
         ...state,
         data: data,
         editing: {
           ...state.editing,
-          [action.id]: false
+          [action.result._id]: false
         },
         saveError: {
           ...state.saveError,
-          [action.id]: null
+          [action.result._id]: null
         }
       };
     case `${actionTypes.SAVE}_FAIL`:
@@ -68,7 +68,7 @@ export default function reducer(state = initialState, action = {}) {
         ...state,
         saveError: {
           ...state.saveError,
-          [action.id]: action.error
+          [action._id]: action.error
         }
       } : state;
     default:

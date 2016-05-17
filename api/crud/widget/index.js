@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 const Widget = mongoose.model('Widget');
 
 
-// seed data if none exists
+// seed widgets data if none exists
 Widget.find().then((widgetsArr) => {
   if(!widgetsArr.length)
     Widget.create([
@@ -14,30 +14,31 @@ Widget.find().then((widgetsArr) => {
 });
 
 export default api => {
-  api.get('/widget', (req, res) => {
-    Widget.find().then(widgets =>
-      res.json(widgets));
-  });
-
+  // Create
   api.post('/widget', (req, res) => {
     Widget.create(req.body).then(createdWidget =>
       res.json(createdWidget));
   });
 
+  // Read
+  api.get('/widget', (req, res) => {
+    Widget.find().then(widgets =>
+      res.json(widgets));
+  });
+
+  // Update
   api.put('/widget', (req, res) => {
-    console.log(req.body);
     const {
       _id,
       ...updatedProps
     } = req.body;
-    Widget.findByIdAndUpdate(_id, updatedProps).then(updatedWidget =>
+    Widget.findByIdAndUpdate(_id, updatedProps, {new: true}).then(updatedWidget =>
       res.json(updatedWidget));
   });
 
+  // Delete
   api.delete('/widget', (req, res) => {
-    const {
-      _id
-    } = req.body;
+    const {_id} = req.body;
     Widget.findByIdAndRemove(_id).then(() => res.json());
   });
 };

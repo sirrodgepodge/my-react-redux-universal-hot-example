@@ -54,9 +54,7 @@ export default class Widgets extends Component {
             editing,
             loading,
             load } = this.props;
-    const handleEdit = widget => () => editStart(`${widget._id}`);
-
-    console.log(error);
+    const handleEdit = widget => () => editStart(widget._id);
 
     const styles = require('./style.scss');
     return (
@@ -101,7 +99,7 @@ export default class Widgets extends Component {
             <tbody>
             {
               widgets.map(widget => editing[widget._id] ?
-                <WidgetForm _id={widget._id} formKey={String(widget._id)} key={String(widget._id)} initialValues={widget}/> :
+                <WidgetForm formKey={widget._id} key={widget._id} initialValues={widget}/> :
                 <tr key={widget._id}>
                   <td className={styles.idCol}>{widget._id}</td>
                   <td className={styles.colorCol}>{widget.color}</td>

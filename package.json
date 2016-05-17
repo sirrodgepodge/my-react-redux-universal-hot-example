@@ -65,7 +65,7 @@
       }
     },
     "start-dev-api": {
-      "command": "node ./bin/api",
+      "command": "node ./bin/api --colors",
       "env": {
         "NODE_PATH": "./api",
         "NODE_ENV": "development",

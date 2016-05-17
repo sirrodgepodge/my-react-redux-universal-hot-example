@@ -4,7 +4,7 @@ import {bindActionCreators} from 'redux';
 import {reduxForm} from 'redux-form';
 import validate, {colors} from './validate';
 import * as widgetActions from 'shared/redux/reducers/widgets';
-import _ from 'lodash';
+// import _ from 'lodash';
 
 
 @connect(
@@ -15,12 +15,12 @@ import _ from 'lodash';
 )
 @reduxForm({
   form: 'widget',
-  fields: ['id', 'color', 'sprocketCount', 'owner'],
+  fields: ['_id', 'color', 'sprocketCount', 'owner'],
   validate: validate
 })
 export default class WidgetForm extends Component {
   static propTypes = {
-    _id: PropTypes.string,
+    // _id: PropTypes.string,
     fields: PropTypes.object.isRequired,
     editStop: PropTypes.func.isRequired,
     handleSubmit: PropTypes.func.isRequired,
@@ -35,9 +35,10 @@ export default class WidgetForm extends Component {
 
   render() {
     const {
-      _id, // for some reason this doesn't come through fields
+      // _id, // for some reason this doesn't come through fields
       editStop,
       fields: {
+        _id,
         color,
         sprocketCount,
         owner
@@ -48,17 +49,23 @@ export default class WidgetForm extends Component {
       pristine,
       save,
       submitting,
+      values,
       saveError: {
         [formKey]: saveError
-      },
-      values } = this.props;
+      }} = this.props;
     const styles = require('../style.scss');
     return (
       <tr className={submitting ? styles.saving : ''}>
-        <td className={styles.idCol}>{_id}</td>
+        <td className={styles.idCol}>{_id.value}</td>
         <td className={styles.colorCol}>
           <select name='color' className='form-control' {...color}>
-            {colors.map(valueColor => <option value={valueColor} key={valueColor}>{valueColor}</option>)}
+            {
+              colors.map(valueColor =>
+                <option value={valueColor} key={valueColor}>
+                  {valueColor}
+                </option>
+              )
+            }
           </select>
           {color.error && color.touched && <div className='text-danger'>{color.error}</div>}
         </td>
@@ -78,7 +85,7 @@ export default class WidgetForm extends Component {
           </button>
           <button className='btn btn-success'
                   onClick={
-                    handleSubmit(() => save(_.merge({_id}, values))
+                    handleSubmit(() => save(values)
                       .then(result => result && typeof result.error === 'object' &&
                         Promise.reject(result.error)))
                   }
