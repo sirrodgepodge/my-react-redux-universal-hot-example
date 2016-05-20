@@ -1,4 +1,18 @@
 .loginPage {
+  padding-top: 15px;
+
+  .toggleSignUp {
+    display: inline-block;
+    padding-bottom: 3px;
+
+    &+.toggleSignUp {
+      margin-left: 50px;
+    }
+
+    &.active {
+      border-bottom: 4px solid black;
+    }
+  }
   input {
     padding: 5px 10px;
     border-radius: 5px;

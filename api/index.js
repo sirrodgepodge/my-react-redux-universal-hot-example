@@ -55,8 +55,8 @@ api.use(session({
   cookie: { maxAge: 60000 }
 }));
 
-// will add all routes from "crud" folder
-requireRouteDirectories(['./crud'], api);
+// will add all routes from "crud" and "auth" folders
+requireRouteDirectories(['./crud', './auth'], api);
 
 // log errors
 api.use((err, req, res, next) => // eslint-disable-line no-unused-vars

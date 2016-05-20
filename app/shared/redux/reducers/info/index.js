@@ -1,4 +1,4 @@
-import * as actionTypes from '../../actionTypes';
+import {INIT} from '../../actionTypes';
 
 
 const initialState = {
@@ -7,19 +7,19 @@ const initialState = {
 
 export default function info(state = initialState, action = {}) {
   switch (action.type) {
-    case actionTypes.INIT:
+    case INIT:
       return {
         ...state,
         loading: true
       };
-    case `${actionTypes.INIT}_SUCCESS`:
+    case `${INIT}_SUCCESS`:
       return {
         ...state,
         loading: false,
         loaded: true,
         data: action.result
       };
-    case `${actionTypes.INIT}_FAIL`:
+    case `${INIT}_FAIL`:
       return {
         ...state,
         loading: false,
@@ -37,7 +37,7 @@ export function isLoaded(globalState) {
 
 export function load() {
   return {
-    type: actionTypes.INIT,
+    type: INIT,
     promise: (client) => client.get('/loadInfo')
   };
 }

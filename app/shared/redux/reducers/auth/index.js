@@ -1,4 +1,9 @@
-import * as actionTypes from '../../actionTypes';
+import {
+  SESSION,
+  SIGNUP,
+  LOGIN,
+  LOGOUT
+} from '../../actionTypes';
 
 
 const initialState = {
@@ -7,55 +12,73 @@ const initialState = {
 
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
-    case actionTypes.SESSION:
+    case SESSION:
       return {
         ...state,
         loading: true
       };
-    case `${actionTypes.SESSION}_SUCCESS`:
+    case `${SESSION}_SUCCESS`:
       return {
         ...state,
         loading: false,
         loaded: true,
         user: action.result
       };
-    case `${actionTypes.SESSION}_FAIL`:
+    case `${SESSION}_FAIL`:
       return {
         ...state,
         loading: false,
         loaded: false,
         error: action.error
       };
-    case actionTypes.LOGIN:
+    case SIGNUP:
       return {
         ...state,
         loggingIn: true
       };
-    case `${actionTypes.LOGIN}_SUCCESS`:
+    case `${SIGNUP}_SUCCESS`:
       return {
         ...state,
         loggingIn: false,
         user: action.result
       };
-    case `${actionTypes.LOGIN}_FAIL`:
+    case `${SIGNUP}_FAIL`:
       return {
         ...state,
         loggingIn: false,
         user: null,
         loginError: action.error
       };
-    case actionTypes.LOGOUT:
+    case LOGIN:
+      return {
+        ...state,
+        loggingIn: true
+      };
+    case `${LOGIN}_SUCCESS`:
+      return {
+        ...state,
+        loggingIn: false,
+        user: action.result
+      };
+    case `${LOGIN}_FAIL`:
+      return {
+        ...state,
+        loggingIn: false,
+        user: null,
+        loginError: action.error
+      };
+    case LOGOUT:
       return {
         ...state,
         loggingOut: true
       };
-    case `${actionTypes.LOGOUT}_SUCCESS`:
+    case `${LOGOUT}_SUCCESS`:
       return {
         ...state,
         loggingOut: false,
         user: null
       };
-    case `${actionTypes.LOGOUT}_FAIL`:
+    case `${LOGOUT}_FAIL`:
       return {
         ...state,
         loggingOut: false,
@@ -72,25 +95,32 @@ export function isLoaded(globalState) {
 
 export function load() {
   return {
-    type: actionTypes.SESSION,
-    promise: client => client.get('/loadAuth')
+    type: SESSION,
+    promise: client => client.get('/auth/session')
   };
 }
 
-export function login(name) {
+export function login(credentials) {
   return {
-    type: actionTypes.LOGIN,
-    promise: client => client.post('/login', {
-      data: {
-        name: name
-      }
+    type: LOGIN,
+    promise: client => client.post('/auth/login', {
+      data: {...credentials}
+    })
+  };
+}
+
+export function signup(credentials) {
+  return {
+    type: SIGNUP,
+    promise: client => client.post('/auth/signup', {
+      data: {...credentials}
     })
   };
 }
 
 export function logout() {
   return {
-    type: actionTypes.LOGOUT,
-    promise: client => client.get('/logout')
+    type: LOGOUT,
+    promise: client => client.get('/auth/logout')
   };
 }

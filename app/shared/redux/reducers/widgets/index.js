@@ -1,5 +1,11 @@
-import * as actionTypes from '../../actionTypes';
 import _ from 'lodash';
+
+import {
+  WIDGET_LOAD,
+  WIDGET_SAVE,
+  WIDGET_EDIT_START,
+  WIDGET_EDIT_STOP
+} from '../../actionTypes';
 
 const initialState = {
   loaded: false,
@@ -9,12 +15,12 @@ const initialState = {
 
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
-    case actionTypes.LOAD:
+    case WIDGET_LOAD:
       return {
         ...state,
         loading: true
       };
-    case `${actionTypes.LOAD}_SUCCESS`:
+    case `${WIDGET_LOAD}_SUCCESS`:
       return {
         ...state,
         loading: false,
@@ -22,7 +28,7 @@ export default function reducer(state = initialState, action = {}) {
         data: action.result,
         error: null
       };
-    case `${actionTypes.LOAD}_FAIL`:
+    case `${WIDGET_LOAD}_FAIL`:
       return {
         ...state,
         loading: false,
@@ -30,7 +36,7 @@ export default function reducer(state = initialState, action = {}) {
         data: null,
         error: action.error
       };
-    case actionTypes.EDIT_START:
+    case WIDGET_EDIT_START:
       return {
         ...state,
         editing: {
@@ -38,7 +44,7 @@ export default function reducer(state = initialState, action = {}) {
           [action.id]: true
         }
       };
-    case actionTypes.EDIT_STOP:
+    case WIDGET_EDIT_STOP:
       return {
         ...state,
         editing: {
@@ -46,9 +52,9 @@ export default function reducer(state = initialState, action = {}) {
           [action.id]: false
         }
       };
-    case actionTypes.SAVE:
+    case WIDGET_SAVE:
       return state; // 'saving' flag handled by redux-form
-    case `${actionTypes.SAVE}_SUCCESS`:
+    case `${WIDGET_SAVE}_SUCCESS`:
       const data = [...state.data];
       _.merge(data.filter(datum => datum._id === action.result._id)[0], action.result);
       return {
@@ -63,7 +69,7 @@ export default function reducer(state = initialState, action = {}) {
           [action.result._id]: null
         }
       };
-    case `${actionTypes.SAVE}_FAIL`:
+    case `${WIDGET_SAVE}_FAIL`:
       return typeof action.error === 'string' ? {
         ...state,
         saveError: {
@@ -82,14 +88,14 @@ export function isLoaded(globalState) {
 
 export function load() {
   return {
-    type: actionTypes.LOAD,
+    type: WIDGET_LOAD,
     promise: client => client.get('/widget') // params not used, just shown as demonstration
   };
 }
 
 export function save(widget) {
   return {
-    type: actionTypes.SAVE,
+    type: WIDGET_SAVE,
     id: widget.id,
     promise: client => client.put('/widget', {
       data: widget
@@ -98,9 +104,9 @@ export function save(widget) {
 }
 
 export function editStart(id) {
-  return { type: actionTypes.EDIT_START, id };
+  return { type: WIDGET_EDIT_START, id };
 }
 
 export function editStop(id) {
-  return { type: actionTypes.EDIT_STOP, id };
+  return { type: WIDGET_EDIT_STOP, id };
 }

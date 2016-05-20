@@ -33,8 +33,8 @@ export default (app, server) => {
     if (error.code !== 'ECONNRESET') {
       // this error will happen every time api is hot loaded so suppress first few in dev
       if(__DEVELOPMENT__ && error.code === 'ECONNREFUSED') {
-        // tick down suppressor after two minutes
-        setTimeout(() => showLog--, 120000); // eslint-disable-line block-scoped-var
+        // tick down suppressor after 1.5 minutes
+        setTimeout(() => showLog--, 90000); // eslint-disable-line block-scoped-var
         if(showLog < 2) return showLog++; // eslint-disable-line block-scoped-var
       }
       console.error('proxy error', error);
