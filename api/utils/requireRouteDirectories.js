@@ -9,16 +9,13 @@ export default (paths, api) => {
 
     const requiredDir = requireDir(path, {recurse: true});
 
-    // if folder contains an "index" file and that file exports a functon, pass in api
-    Object.keys(requiredDir).forEach(folderName => {
-      typeof requiredDir[folderName].index === 'function' && requiredDir[folderName].index(api);
-    });
-
+    // recurse through folders and pass api into those that export functions
     const objLoopFunc = (obj, func) => Object.keys(obj).forEach(prop => func(obj[prop]));
 
-    const runIfFunc = folder => typeof folder.index === 'function' ?
-      folder.index(api) :
-      folder && objLoopFunc(folder, runIfFunc);
+    const runIfFunc = folder => typeof folder === 'function' ?
+      folder(api) :
+      typeof folder === 'object' &&
+      objLoopFunc(folder, runIfFunc);
 
     objLoopFunc(requiredDir, runIfFunc);
   });

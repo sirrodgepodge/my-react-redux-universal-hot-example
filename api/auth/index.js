@@ -35,14 +35,14 @@ export default api => {
 
   // When we receive a cookie from the browser, we check the sessions collection for that id, then retrieve the corresponding user and set them as req.user.
   passport.deserializeUser((id, done) =>
-    User.findByIdAsync(id)
+    User.findById(id)
       .then(user => done(null, user))
       .catch(err => console.log(err)));
 
   // Gets user off session if logged in
-  api.get('/auth/session', (req, res) =>
+  api.get('/auth/session', (req, res) => !console.log('hitting') &&
     !req.user ?
-    res.status(200).send('') :
+    res.status(200).json(null) : // need to keep status 200 for isomorphic logic to work
     res.status(200).json(_.merge(_.omit(req.user.toObject(), ['password', 'salt']), {
       hasPassword: !!req.user.password
     }))

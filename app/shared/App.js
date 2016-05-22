@@ -9,7 +9,7 @@ import config from 'config'; // eslint-disable-line import/default
 
 // redux interaction
 import { isLoaded as isInfoLoaded, load as loadInfo } from 'shared/redux/reducers/info';
-import { isLoaded as isAuthLoaded, load as loadAuth, logout } from 'shared/redux/reducers/auth';
+import { logout } from 'shared/redux/reducers/auth';
 
 // bootstrap
 import Navbar from 'react-bootstrap/lib/Navbar';
@@ -28,8 +28,8 @@ import InfoBar from 'shared/common/components/r_InfoBar';
     if (!isInfoLoaded(state))
       promises.push(dispatch(loadInfo()));
 
-    if (!isAuthLoaded(state))
-      promises.push(dispatch(loadAuth()));
+    // if (!isAuthLoaded(state))
+    //   promises.push(dispatch(loadAuth()));
 
     return Promise.all(promises);
   }
@@ -120,7 +120,7 @@ export default class App extends Component {
             {
               user &&
               <p className={`${styles.loggedInMessage} navbar-text`}>
-                Logged in as <strong>{user.name}</strong>.
+                Logged in as <strong>{user.email}</strong>.
               </p>
             }
             <Nav navbar pullRight>

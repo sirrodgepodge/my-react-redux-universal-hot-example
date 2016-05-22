@@ -1,5 +1,5 @@
 import {
-  SESSION,
+  // SESSION,
   SIGNUP,
   LOGIN,
   LOGOUT
@@ -12,37 +12,20 @@ const initialState = {
 
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
-    case SESSION:
-      return {
-        ...state,
-        loading: true
-      };
-    case `${SESSION}_SUCCESS`:
-      return {
-        ...state,
-        loading: false,
-        loaded: true,
-        user: action.result
-      };
-    case `${SESSION}_FAIL`:
-      return {
-        ...state,
-        loading: false,
-        loaded: false,
-        error: action.error
-      };
     case SIGNUP:
       return {
         ...state,
         loggingIn: true
       };
     case `${SIGNUP}_SUCCESS`:
+      console.log(action);
       return {
         ...state,
         loggingIn: false,
         user: action.result
       };
     case `${SIGNUP}_FAIL`:
+      console.log(action);
       return {
         ...state,
         loggingIn: false,
@@ -55,12 +38,14 @@ export default function reducer(state = initialState, action = {}) {
         loggingIn: true
       };
     case `${LOGIN}_SUCCESS`:
+      console.log(action);
       return {
         ...state,
         loggingIn: false,
         user: action.result
       };
     case `${LOGIN}_FAIL`:
+      console.log(action);
       return {
         ...state,
         loggingIn: false,
@@ -91,13 +76,6 @@ export default function reducer(state = initialState, action = {}) {
 
 export function isLoaded(globalState) {
   return globalState.auth && globalState.auth.loaded;
-}
-
-export function load() {
-  return {
-    type: SESSION,
-    promise: client => client.get('/auth/session')
-  };
 }
 
 export function login(credentials) {

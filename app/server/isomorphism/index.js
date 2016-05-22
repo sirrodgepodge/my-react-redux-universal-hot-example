@@ -25,41 +25,48 @@ export default app => {
     }
     const client = new ApiClient(req);
     const memoryHistory = createHistory(req.originalUrl);
-    const store = createStore(memoryHistory, client);
-    const history = syncHistoryWithStore(memoryHistory, store);
 
+    // sends initial html to client
     function hydrateOnClient(initialState, component) {
       res.send(`<!doctype html>
         ${ReactDOM.renderToString(<Html assets={webpackIsomorphicTools.assets()} store={initialState} {...(component && {component} || {})}/>)}`);
     }
 
-    if (__DISABLE_SSR__) {
-      hydrateOnClient(store);
-      return;
-    }
+    // check session to see if user is logged in, pass result into store as user object
+    client.get('/auth/session').then(user =>
+      handleRender(createStore(memoryHistory, client, {auth: {user}})));
 
-    match({ history, routes: getRoutes(store), location: req.originalUrl }, (error, redirectLocation, renderProps) => {
-      if (redirectLocation) {
-        res.redirect(redirectLocation.pathname + redirectLocation.search);
-      } else if (error) {
-        console.error('ROUTER ERROR: ', pretty.render(error));
-        res.status(500);
+    function handleRender(store) {
+      const history = syncHistoryWithStore(memoryHistory, store);
+
+      if (__DISABLE_SSR__) {
         hydrateOnClient(store);
-      } else if (renderProps) {
-        loadOnServer({...renderProps, store, helpers: {client}}).then(() => {
-          res.status(200);
-
-          global.navigator = {userAgent: req.headers['user-agent']};
-
-          hydrateOnClient(store, (
-            <Provider store={store} key='provider'>
-              <ReduxAsyncConnect {...renderProps} />
-            </Provider>
-          ));
-        });
-      } else {
-        res.status(404).send('Not found');
+        return;
       }
-    });
+
+      match({ history, routes: getRoutes(store), location: req.originalUrl }, (error, redirectLocation, renderProps) => {
+        if (redirectLocation) {
+          res.redirect(redirectLocation.pathname + redirectLocation.search);
+        } else if (error) {
+          console.error('ROUTER ERROR: ', pretty.render(error));
+          res.status(500);
+          hydrateOnClient(store);
+        } else if (renderProps) {
+          loadOnServer({...renderProps, store, helpers: {client}}).then(() => {
+            res.status(200);
+
+            global.navigator = {userAgent: req.headers['user-agent']};
+
+            hydrateOnClient(store, (
+              <Provider store={store} key='provider'>
+                <ReduxAsyncConnect {...renderProps} />
+              </Provider>
+            ));
+          });
+        } else {
+          res.status(404).send('Not found');
+        }
+      });
+    }
   });
 };

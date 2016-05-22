@@ -15,9 +15,12 @@ export default api => {
         return next(err);
       }
 
-      // since this is a silly example, if the user's login credentials don't match any users we just create a new user
+      // if auth fails send back error
       if (!user)
-        return res.status(401).json({error: 'Invalid login credentials.'});
+        return res.status(401).json({
+          status: 401,
+          error: 'Invalid login credentials.'
+        });
 
       // req.logIn will establish our session.
       req.logIn(user, loginErr => {

@@ -9,12 +9,16 @@ import cx from 'classnames';
 
 @connect(
   store => ({
-    user: store.auth.user
+    user: store.auth.user,
+    loggingIn: store.auth.loggingIn,
+    loginError: store.auth.loginError && store.auth.loginError.error
   }),
   authActions)
 export default class Login extends Component {
   static propTypes = {
     user: PropTypes.object,
+    loggingIn: PropTypes.bool,
+    loginError: PropTypes.string,
     login: PropTypes.func,
     logout: PropTypes.func
   }
@@ -32,19 +36,24 @@ export default class Login extends Component {
 
   handleSubmit = (authType, event) => {
     event.preventDefault();
-    const usernameInput = this.refs.username;
+    const emailInput = this.refs.email;
     const passwordInput = this.refs.password;
     this.props[authType]({
-      username: usernameInput.value,
+      email: emailInput.value,
       password: passwordInput.value
     });
-    usernameInput.value = '';
+    emailInput.value = '';
     passwordInput.value = '';
   }
 
   render() {
     // retrieve vars from props and state
-    const {user, logout} = this.props;
+    const {
+      user,
+      loggingIn,
+      logout,
+      loginError
+    } = this.props;
     const {showSignUp} = this.state;
 
     // styles
@@ -68,9 +77,9 @@ export default class Login extends Component {
               showSignUp
               &&
               <div>
-                <form className='login-form form-inline' onSubmit={this.handleSubmit}>
+                <form className='login-form form-inline' onSubmit={this.handleSubmit.bind(this, 'signup')}>
                   <div className='form-group'>
-                    <input type='text' ref='username' placeholder='Username' className='form-control'/>
+                    <input type='text' ref='email' placeholder='Email' className='form-control'/>
                     <input type='text' ref='password' placeholder='Password' className='form-control'/>
                     <button className='btn btn-success' onClick={this.handleSubmit.bind(this, 'signup')}><i className='fa fa-pencil-square-o'/>{' '}Sign Up</button>
                   </div>
@@ -79,9 +88,9 @@ export default class Login extends Component {
               </div>
               ||
               <div>
-                <form className='login-form form-inline' onSubmit={this.handleSubmit}>
+                <form className='login-form form-inline' onSubmit={this.handleSubmit.bind(this, 'login')}>
                   <div className='form-group'>
-                    <input type='text' ref='username' placeholder='Username' className='form-control'/>
+                    <input type='text' ref='email' placeholder='Email' className='form-control'/>
                     <input type='text' ref='password' placeholder='Password' className='form-control'/>
                     <button className='btn btn-success' onClick={this.handleSubmit.bind(this, 'login')}><i className='fa fa-sign-in'/>{' '}Log In</button>
                   </div>
@@ -104,12 +113,22 @@ export default class Login extends Component {
         {
           user &&
           <div>
-            <p>You are currently logged in as {user.name}.</p>
-
+            <p>You are currently logged in as {user.email}.</p>
             <div>
               <button className='btn btn-danger' onClick={logout}><i className='fa fa-sign-out'/>{' '}Log Out</button>
             </div>
           </div>
+        }
+        {
+          loggingIn
+          &&
+            <i className='fa fa-cog fa-spin fa-4x'/>
+          ||
+          loginError
+          &&
+            <div className='alert alert-danger'>
+              There was an auth error: {loginError}
+            </div>
         }
       </div>
     );
