@@ -6,11 +6,11 @@ const proxy = httpProxy.createProxyServer({
   target: apiUrl,
   ws: true
 });
-
+const proxyRegex = /\/api|\/auth/;
 
 export default (app, server) => {
   // Proxy websockets and API requests to API server
-  app.use('/api', (req, res) => {
+  app.use(proxyRegex, (req, res) => {
     proxy.web(req, res, {target: apiUrl});
   });
 

@@ -39,8 +39,8 @@ export default api => {
       .then(user => done(null, user))
       .catch(err => console.log(err)));
 
-  // Gets user off session if logged in
-  api.get('/auth/session', (req, res) => !console.log('hitting') &&
+  // Gets user off session if logged in (checked upon initial get request)
+  api.get('/session', (req, res) =>
     !req.user ?
     res.status(200).json(null) : // need to keep status 200 for isomorphic logic to work
     res.status(200).json(_.merge(_.omit(req.user.toObject(), ['password', 'salt']), {
@@ -49,7 +49,7 @@ export default api => {
   );
 
   // Simple /logout route.
-  api.get('/auth/logout', (req, res) => {
+  api.get('/logout', (req, res) => {
     req.session.destroy();
     res.status(200).end();
   });

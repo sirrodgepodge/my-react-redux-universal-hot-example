@@ -33,7 +33,7 @@ export default app => {
     }
 
     // check session to see if user is logged in, pass result into store as user object
-    client.get('/auth/session').then(user =>
+    client.get('/session').then(user =>
       handleRender(createStore(memoryHistory, client, {auth: {user}})));
 
     function handleRender(store) {

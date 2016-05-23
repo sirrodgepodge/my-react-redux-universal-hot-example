@@ -1,6 +1,9 @@
 #!/usr/bin/env node
 'use strict';
 
+// attach environmental vars from ".env" file to process.env
+require('dotenv').config();
+
 // handles live node reloads
 if (process.env.NODE_ENV !== 'production' && !require('piping')({hook: true, ignore: /(\/\.|~$|\.json$)/i}))
   return;

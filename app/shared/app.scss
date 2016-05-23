@@ -16,6 +16,21 @@
     font-size: 2em;
     line-height: 20px;
   }
+
+  .userPhoto {
+    display: none;
+    margin: 10px 10px 0 0;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 1px solid #f8e813;
+    background: #000 no-repeat center /contain;
+    cursor: default;
+  }
+
+  .userPhoto.show {
+    display: block !important;
+  }
 }
 .appContent {
   margin: 56px 0; // for fixed navbar

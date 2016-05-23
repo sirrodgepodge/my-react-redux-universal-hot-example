@@ -31,7 +31,6 @@ UserSchema.methods.correctPassword = function correctPassword(password) {
 
 // handle hashing password in 'pre' hooks
 UserSchema.pre('save', handlePasswordChange);  // runs 'handlePasswordChange' prior to 'save' action
-UserSchema.pre('update', handlePasswordChange);  // runs 'handlePasswordChange' prior to 'update' action
 
 // set user schema on mongoose
 mongoose.model('User', UserSchema);

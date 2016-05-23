@@ -116,14 +116,20 @@ export default class App extends Component {
                   </NavItem>
                 </LinkContainer>
               }
+              {
+                user &&
+                <LinkContainer to='/loginSuccess'>
+                  <NavItem eventKey={6}>
+                    Logged in as <strong>{user.email}</strong>.
+                  </NavItem>
+                </LinkContainer>
+              }
             </Nav>
-            {
-              user &&
-              <p className={`${styles.loggedInMessage} navbar-text`}>
-                Logged in as <strong>{user.email}</strong>.
-              </p>
-            }
             <Nav navbar pullRight>
+              <li className={`nav ${styles.userPhoto} ${user && user.google && user.google.photo && 'show'}`}
+                style={user && user.google && user.google.photo && {backgroundImage: `url(${user.google.photo})`}}/>
+              <li className={`nav ${styles.userPhoto} ${user && user.facebook && user.facebook.photo && 'show'}`}
+                style={user && user.facebook && user.facebook.photo && {backgroundImage: `url(${user.facebook.photo})`}}/>
               <NavItem eventKey={1} target='_blank' title='View on Github' href='https://github.com/erikras/react-redux-universal-hot-example'>
                 <i className='fa fa-github'/>
               </NavItem>

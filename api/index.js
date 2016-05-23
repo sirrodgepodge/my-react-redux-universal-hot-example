@@ -4,7 +4,7 @@ import bodyParser from 'body-parser';
 import PrettyError from 'pretty-error';
 import http from 'http';
 import SocketIo from 'socket.io';
-import dotenv from 'dotenv';
+
 
 // modified classic logging library
 import logger from 'utils/morganMod'; // eslint-disable-line import/default
@@ -16,9 +16,6 @@ import requireRouteDirectories from 'utils/requireRouteDirectories';
 
 const pretty = new PrettyError();
 const api = express();
-
-// attach environmental vars from ".env" file to process.env
-dotenv.config();
 
 const isProd = process.env.NODE_ENV === 'production';
 

@@ -2,7 +2,8 @@ import {
   // SESSION,
   SIGNUP,
   LOGIN,
-  LOGOUT
+  LOGOUT,
+  ADD_PASSWORD
 } from '../../actionTypes';
 
 
@@ -69,13 +70,26 @@ export default function reducer(state = initialState, action = {}) {
         loggingOut: false,
         logoutError: action.error
       };
+    case ADD_PASSWORD:
+      return {
+        ...state,
+        addingPassword: true
+      };
+    case `${ADD_PASSWORD}_SUCCESS`:
+      return {
+        ...state,
+        addingPassword: false,
+        user: _.merge({}, state.user, {hasPassword: true})
+      };
+    case `${ADD_PASSWORD}_FAIL`:
+      return {
+        ...state,
+        addingPassword: false,
+        addingPasswordError: action.error
+      };
     default:
       return state;
   }
-}
-
-export function isLoaded(globalState) {
-  return globalState.auth && globalState.auth.loaded;
 }
 
 export function login(credentials) {
@@ -100,5 +114,14 @@ export function logout() {
   return {
     type: LOGOUT,
     promise: client => client.get('/auth/logout')
+  };
+}
+
+export function addPassword(idAndPassword) {
+  return {
+    type: ADD_PASSWORD,
+    promise: client => client.post('/auth/addPassword', {
+      data: {...idAndPassword}
+    })
   };
 }

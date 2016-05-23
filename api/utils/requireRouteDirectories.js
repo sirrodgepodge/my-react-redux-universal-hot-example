@@ -10,7 +10,9 @@ export default (paths, api) => {
     const requiredDir = requireDir(path, {recurse: true});
 
     // recurse through folders and pass api into those that export functions
-    const objLoopFunc = (obj, func) => Object.keys(obj).forEach(prop => func(obj[prop]));
+    const objLoopFunc = (obj, func) => Object.keys(obj)
+      .sort(key => key === 'index' ? -1 : 1) // put index.js first so that function gets run before going deeper
+      .forEach(prop => func(obj[prop]));
 
     const runIfFunc = folder => typeof folder === 'function' ?
       folder(api) :
