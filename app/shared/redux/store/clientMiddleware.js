@@ -5,7 +5,7 @@ export default function clientMiddleware(client) {
         return action(dispatch, getState);
       }
 
-      const { promise, type, ...rest } = action; // eslint-disable-line no-redeclare
+      const { promise, type, ...rest } = action;
 
       // if action does not have a promise property then "next" it and stop executing
       if (!promise)
@@ -16,8 +16,8 @@ export default function clientMiddleware(client) {
 
       const actionPromise = promise(client);
       actionPromise.then(
-        result => next({...rest, result, type: `${type}_SUCCESS`}),
-        error => next({...rest, error, type: `${type}_FAIL`})
+        response => next({...rest, response, type: `${type}_SUCCESS`}),
+        error => next({...rest, response: error, type: `${type}_FAIL`})
       ).catch(error => {
         console.error('MIDDLEWARE ERROR:', error);
         next({...rest, error, type: `${type}_FAIL`});

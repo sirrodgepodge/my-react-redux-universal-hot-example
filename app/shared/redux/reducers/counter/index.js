@@ -1,9 +1,9 @@
-import {INCREMENT} from '../../actionTypes';
-
+import { INCREMENT } from '../../actionTypes';
 
 const initialState = {
   count: 0
 };
+
 
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {

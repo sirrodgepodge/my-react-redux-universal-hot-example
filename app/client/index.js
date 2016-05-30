@@ -5,21 +5,28 @@ import 'babel-polyfill';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import createStore from '../shared/redux/store/createStore';
-import ApiClient from '../shared/lib/ApiClient';
+import SimpleIsoFetch, { syncBindingsWithStore } from 'simple-iso-fetch';
 import io from 'socket.io-client';
-import {Provider} from 'react-redux';
+import { Provider } from 'react-redux';
 import { Router, browserHistory } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
 import { ReduxAsyncConnect } from 'redux-async-connect';
 import useScroll from 'scroll-behavior/lib/useStandardScroll';
 
+// bring in routes
 import getRoutes from '../shared/routes';
 
-const client = new ApiClient();
+// set base url for client-side requests
+SimpleIsoFetch.setBaseUrl('/api');
+
+// create SimpleIsoFetch instance
+const simpleIsoFetch = new SimpleIsoFetch();
+
 const _browserHistory = useScroll(() => browserHistory)();
 const dest = document.getElementById('content');
-const store = createStore(_browserHistory, client, window.__data);
-const history = syncHistoryWithStore(_browserHistory, store);
+const store = createStore(_browserHistory, simpleIsoFetch, window.__data);
+syncBindingsWithStore(simpleIsoFetch, store); // attaches function bindings to state
+const history = syncHistoryWithStore(_browserHistory, store); // attaches routing to state
 
 function initSocket() {
   const socket = io('', {path: '/ws'});
@@ -39,7 +46,7 @@ global.socket = initSocket();
 const component = (
   <Router history={history}
           render={props =>
-            <ReduxAsyncConnect {...props} helpers={{client}} filter={item => !item.deferred}/>}>
+            <ReduxAsyncConnect {...props} helpers={{client: simpleIsoFetch}} filter={item => !item.deferred}/>}>
     {getRoutes(store)}
   </Router>
 );

@@ -35,3 +35,39 @@
 .appContent {
   margin: 56px 0; // for fixed navbar
 }
+
+// bring in react-toastr lib
+:global { @import './common/stylesheets/react-toastr.scss'; }
+
+:global {
+  #toastContainer {
+    position: fixed;
+    top: 60px;
+    right: 0;
+
+  }
+  
+  .toast {
+    transform: translate3d(0,0,0);
+  }
+
+  .slide {
+    transition: .2s linear;
+  }
+
+  .slide-enter {
+    transform: translate3d(110%, 0, 0);
+  }
+
+  .slide-enter.slide-enter-active {
+    transform: translate3d(0, 0, 0);
+  }
+
+  .slide-leave {
+    transform: translate3d(0, 0, 0);
+  }
+
+  .slide-leave.slide-leave-active {
+    transform: translate3d(110%, 0, 0);
+  }
+}

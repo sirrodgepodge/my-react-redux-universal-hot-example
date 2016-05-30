@@ -7,6 +7,17 @@ import { LinkContainer } from 'react-router-bootstrap';
 import Helmet from 'react-helmet';
 import config from 'config'; // eslint-disable-line import/default
 
+// used to create actions to bind functions to API call responses
+import { bindToErrorAction, unbindFromErrorAction } from 'simple-iso-fetch';
+
+// using react-toastr library to demo simple-iso-fetch bindings
+import {
+  ToastContainer,
+  ToastMessage,
+} from 'react-toastr';
+const ToastMessageAnim = ToastMessage.animation;
+
+
 // redux interaction
 import { isLoaded as isInfoLoaded, load as loadInfo } from 'shared/redux/reducers/info';
 import { logout } from 'shared/redux/reducers/auth';
@@ -36,18 +47,36 @@ import InfoBar from 'shared/common/components/r_InfoBar';
 }])
 @connect(
   state => ({user: state.auth.user}),
-  {logout, push})
+  {logout, push, bindToErrorAction, unbindFromErrorAction})
 export default class App extends Component {
   static propTypes = {
     children: PropTypes.object.isRequired,
     user: PropTypes.object,
     logout: PropTypes.func.isRequired,
-    push: PropTypes.func.isRequired
+    push: PropTypes.func.isRequired,
+    bindToErrorAction: PropTypes.func.isRequired,
+    unbindFromErrorAction: PropTypes.func.isRequired
   };
 
   static contextTypes = {
     store: PropTypes.object.isRequired
   };
+
+  componentDidMount() {
+    this.errorToastFunc = (res) => {
+      (res.body.errors || [{errorMessage: res.body}]).forEach(error =>
+        this.refs.container.error(
+          process.env.NODE_ENV === 'production' ?
+          'Sorry! ...please refresh the page' :
+          `${error.errorCode || 500}: ${error.errorMessage && error.errorMessage.error || error.errorMessage} \n ${res.method},${res.url}`,
+          `${res.body && res.body.status || res.status || 500} (internal)` || 'There was a server-side error',
+          {closeButton: true}
+        ));
+    };
+
+    // transform response
+    this.props.bindToErrorAction(this.errorToastFunc);
+  }
 
   componentWillReceiveProps(nextProps) {
     if (!this.props.user && nextProps.user) {
@@ -59,10 +88,14 @@ export default class App extends Component {
     }
   }
 
+  componentWillUnmount() {
+    this.props.unbindFromErrorAction(this.errorToastFunc);
+  }
+
   handleLogout = (event) => {
     event.preventDefault();
     this.props.logout();
-  };
+  }
 
   render() {
     const {user} = this.props;
@@ -71,6 +104,16 @@ export default class App extends Component {
     return (
       <div className={styles.app}>
         <Helmet {...config.app.head}/>
+        <div>
+          <ToastContainer
+            toastMessageFactory={props =>
+              <ToastMessageAnim {...props}
+                className='slide'
+                transition='slide'
+                timeOut={6000}/>}
+                ref='container'
+                className='toast-top-right'/>
+        </div>
         <Navbar fixedTop>
           <Navbar.Header>
             <Navbar.Brand>

@@ -13,8 +13,16 @@ const initialState = {
   saveError: {}
 };
 
-export default function reducer(state = initialState, action = {}) {
-  switch (action.type) {
+
+export default function reducer(state = initialState, {
+  type,
+  response: {
+    body,
+    status // eslint-disable-line no-unused-vars
+  } = {},
+  ...action // eslint-disable-line no-unused-vars
+} = {}) {
+  switch (type) {
     case WIDGET_LOAD:
       return {
         ...state,
@@ -25,7 +33,7 @@ export default function reducer(state = initialState, action = {}) {
         ...state,
         loading: false,
         loaded: true,
-        data: action.result,
+        data: body,
         error: null
       };
     case `${WIDGET_LOAD}_FAIL`:
@@ -34,14 +42,14 @@ export default function reducer(state = initialState, action = {}) {
         loading: false,
         loaded: false,
         data: null,
-        error: action.error
+        error: body
       };
     case WIDGET_EDIT_START:
       return {
         ...state,
         editing: {
           ...state.editing,
-          [action.id]: true
+          [action._id]: true
         }
       };
     case WIDGET_EDIT_STOP:
@@ -49,32 +57,32 @@ export default function reducer(state = initialState, action = {}) {
         ...state,
         editing: {
           ...state.editing,
-          [action.id]: false
+          [action._id]: false
         }
       };
     case WIDGET_SAVE:
       return state; // 'saving' flag handled by redux-form
     case `${WIDGET_SAVE}_SUCCESS`:
       const data = [...state.data];
-      _.merge(data.filter(datum => datum._id === action.result._id)[0], action.result);
+      _.merge(data.filter(datum => datum._id === body._id)[0], body);
       return {
         ...state,
-        data: data,
+        data,
         editing: {
           ...state.editing,
-          [action.result._id]: false
+          [body._id]: false
         },
         saveError: {
           ...state.saveError,
-          [action.result._id]: null
+          [body._id]: null
         }
       };
     case `${WIDGET_SAVE}_FAIL`:
-      return typeof action.error === 'string' ? {
+      return typeof body === 'string' ? {
         ...state,
         saveError: {
           ...state.saveError,
-          [action._id]: action.error
+          [action._id]: body
         }
       } : state;
     default:
@@ -97,16 +105,17 @@ export function save(widget) {
   return {
     type: WIDGET_SAVE,
     id: widget.id,
-    promise: client => client.put('/widget', {
-      data: widget
+    promise: client => client.put({
+      route: '/widget',
+      body: widget
     })
   };
 }
 
-export function editStart(id) {
-  return { type: WIDGET_EDIT_START, id };
+export function editStart(_id) {
+  return { type: WIDGET_EDIT_START, _id };
 }
 
-export function editStop(id) {
-  return { type: WIDGET_EDIT_STOP, id };
+export function editStop(_id) {
+  return { type: WIDGET_EDIT_STOP, _id };
 }

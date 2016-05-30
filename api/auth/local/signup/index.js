@@ -6,13 +6,13 @@ const User = mongoose.model('User');
 import _ from 'lodash';
 
 export default api => {
-  api.post('/auth/signup', (req, res, next) =>
+  api.post('/signup', (req, res, next) =>
     User.findOne({email: req.body.email})
       .then(foundUser => !foundUser ?
         new User(req.body).save() :
-        !foundUser.password && foundUser.facebook || !foundUser.password && foundUser.google ?
-        Promise.reject({error: 'It looks as though you\'ve signed up through Facebook or Google, log with that method and add a password to your account if you\'d like', status: 401}) :
-        Promise.reject({error: 'A user with this email already exists', status: 401}))
+        foundUser.password ?
+        Promise.reject({error: 'A user with this email already exists', status: 401}) :
+        Promise.reject({error: 'It looks as though you\'ve signed up through Facebook or Google, log with that method and add a password to your account if you\'d like', status: 401}))
       .then(storedUser => req.logIn(storedUser, loginErr => {
         if (loginErr) {
           return next(loginErr);

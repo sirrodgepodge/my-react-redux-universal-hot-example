@@ -7,7 +7,7 @@ import _ from 'lodash';
 
 export default api => {
   // A POST /login route is created to handle login.
-  api.post('/auth/addPassword', (req, res, next) => {
+  api.post('/addPassword', (req, res, next) => {
     const {
       _id: userId,
       password

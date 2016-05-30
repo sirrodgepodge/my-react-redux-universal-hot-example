@@ -6,7 +6,7 @@ import _ from 'lodash';
 
 export default api => {
   // A POST /login route is created to handle login.
-  api.post('/auth/login', (req, res, next) => {
+  api.post('/login', (req, res, next) => {
     // handles authentication, have to deal with restful response in callback
     passport.authenticate('local', authCb)(req, res, next);
 

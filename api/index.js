@@ -10,8 +10,6 @@ import SocketIo from 'socket.io';
 import logger from 'utils/morganMod'; // eslint-disable-line import/default
 
 import config from '../app/config'; // eslint-disable-line import/default
-import * as actions from './actions/index';
-import mapUrl from 'utils/mapUrl';
 import requireRouteDirectories from 'utils/requireRouteDirectories';
 
 const pretty = new PrettyError();
@@ -25,6 +23,7 @@ const io = new SocketIo(server);
 io.path('/ws');
 
 // parses body + query on request
+api.use(bodyParser.urlencoded());
 api.use(bodyParser.json());
 
 // logging
@@ -60,31 +59,8 @@ api.use((err, req, res, next) => // eslint-disable-line no-unused-vars
   console.log(pretty.render(err)));
 
 api.use((req, res) => {
-  const splitUrlPath = req.url.split('?')[0].split('/').slice(1);
-
-  const {action, params} = mapUrl(actions, splitUrlPath);
-
-  if (action)
-    action(req, params)
-      .then(
-        result => {
-          if(result instanceof Function)
-            result(res);
-          else
-            res.json(result);
-        },
-        reason => {
-          // handle redirect
-          if(reason && reason.redirect && res.redirect(reason.redirect)) return;
-
-          // handle error
-          console.error('API ERROR: ', pretty.render(reason));
-          res.status(reason.status || 500).json(reason);
-        }
-      );
-  else
-    // hit if route not found
-    res.status(404).end('NOT FOUND');
+  // hit if route not found
+  res.status(404).end('NOT FOUND');
 });
 
 if (config.apiPort) {

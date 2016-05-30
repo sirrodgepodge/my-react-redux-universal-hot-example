@@ -1,37 +1,41 @@
 import {
-  // SESSION,
   SIGNUP,
   LOGIN,
   LOGOUT,
   ADD_PASSWORD
 } from '../../actionTypes';
 
-
 const initialState = {
   loaded: false
 };
 
-export default function reducer(state = initialState, action = {}) {
-  switch (action.type) {
+
+export default function reducer(state = initialState, {
+  type,
+  response: {
+    body,
+    status // eslint-disable-line no-unused-vars
+  } = {},
+  ...action // eslint-disable-line no-unused-vars
+} = {}) {
+  switch (type) {
     case SIGNUP:
       return {
         ...state,
         loggingIn: true
       };
     case `${SIGNUP}_SUCCESS`:
-      console.log(action);
       return {
         ...state,
         loggingIn: false,
-        user: action.result
+        user: body
       };
     case `${SIGNUP}_FAIL`:
-      console.log(action);
       return {
         ...state,
         loggingIn: false,
         user: null,
-        loginError: action.error
+        loginError: body
       };
     case LOGIN:
       return {
@@ -39,19 +43,17 @@ export default function reducer(state = initialState, action = {}) {
         loggingIn: true
       };
     case `${LOGIN}_SUCCESS`:
-      console.log(action);
       return {
         ...state,
         loggingIn: false,
-        user: action.result
+        user: body
       };
     case `${LOGIN}_FAIL`:
-      console.log(action);
       return {
         ...state,
         loggingIn: false,
         user: null,
-        loginError: action.error
+        loginError: body
       };
     case LOGOUT:
       return {
@@ -68,7 +70,7 @@ export default function reducer(state = initialState, action = {}) {
       return {
         ...state,
         loggingOut: false,
-        logoutError: action.error
+        logoutError: body
       };
     case ADD_PASSWORD:
       return {
@@ -79,13 +81,13 @@ export default function reducer(state = initialState, action = {}) {
       return {
         ...state,
         addingPassword: false,
-        user: _.merge({}, state.user, {hasPassword: true})
+        user: {...state.user, hasPassword: true}
       };
     case `${ADD_PASSWORD}_FAIL`:
       return {
         ...state,
         addingPassword: false,
-        addingPasswordError: action.error
+        addingPasswordError: body
       };
     default:
       return state;
@@ -95,8 +97,8 @@ export default function reducer(state = initialState, action = {}) {
 export function login(credentials) {
   return {
     type: LOGIN,
-    promise: client => client.post('/auth/login', {
-      data: {...credentials}
+    promise: client => client.post('/login', {
+      body: {...credentials}
     })
   };
 }
@@ -104,8 +106,9 @@ export function login(credentials) {
 export function signup(credentials) {
   return {
     type: SIGNUP,
-    promise: client => client.post('/auth/signup', {
-      data: {...credentials}
+    promise: client => client.post({
+      route: '/signup',
+      body: {...credentials}
     })
   };
 }
@@ -113,15 +116,16 @@ export function signup(credentials) {
 export function logout() {
   return {
     type: LOGOUT,
-    promise: client => client.get('/auth/logout')
+    promise: client => client.get('/logout')
   };
 }
 
 export function addPassword(idAndPassword) {
   return {
     type: ADD_PASSWORD,
-    promise: client => client.post('/auth/addPassword', {
-      data: {...idAndPassword}
+    promise: client => client.post({
+      route: '/addPassword',
+      body: {...idAndPassword}
     })
   };
 }

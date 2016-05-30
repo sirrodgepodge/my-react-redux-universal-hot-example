@@ -61,7 +61,7 @@ export default class LoginSuccess extends Component {
               Add Password to account
               <form className='login-form form-inline' onSubmit={this.handleSubmit}>
                 <div className='form-group'>
-                  <input type='text' ref='password' placeholder='Password' type='password' className='form-control'/>
+                  <input type='password' ref='password' placeholder='Password' type='password' className='form-control'/>
                   <button className='btn btn-success' onClick={this.handleSubmit}><i className='fa fa-pencil-square-o'/>{' '}Add Password</button>
                 </div>
               </form>
@@ -70,7 +70,7 @@ export default class LoginSuccess extends Component {
           {
             !user.google
             &&
-            <a className='btn btn-danger' href='/auth/google'>
+            <a className='btn btn-danger' href='/api/google'>
               <i className='fa fa-google o-auth-btn'/>
               {' '} Connect Google Account
             </a>
@@ -78,7 +78,7 @@ export default class LoginSuccess extends Component {
           {
             !user.facebook
             &&
-            <a className='btn btn-primary' href='/auth/facebook'>
+            <a className='btn btn-primary' href='/api/facebook'>
               <i className='fa fa-facebook o-auth-btn'/>
               {' '} Connect Facebook Account
             </a>

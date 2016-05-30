@@ -1,12 +1,19 @@
-import {INIT} from '../../actionTypes';
-
+import { INIT } from '../../actionTypes';
 
 const initialState = {
   loaded: false
 };
 
-export default function info(state = initialState, action = {}) {
-  switch (action.type) {
+
+export default function info(state = initialState, {
+  type,
+  response: {
+    body,
+    status // eslint-disable-line no-unused-vars
+  } = {},
+  ...action // eslint-disable-line no-unused-vars
+} = {}) {
+  switch (type) {
     case INIT:
       return {
         ...state,
@@ -17,14 +24,14 @@ export default function info(state = initialState, action = {}) {
         ...state,
         loading: false,
         loaded: true,
-        data: action.result
+        data: body
       };
     case `${INIT}_FAIL`:
       return {
         ...state,
         loading: false,
         loaded: false,
-        error: action.error
+        error: body
       };
     default:
       return state;
@@ -38,6 +45,6 @@ export function isLoaded(globalState) {
 export function load() {
   return {
     type: INIT,
-    promise: (client) => client.get('/loadInfo')
+    promise: client => client.get('/loadInfo')
   };
 }

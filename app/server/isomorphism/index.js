@@ -10,11 +10,15 @@ const pretty = new PrettyError();
 
 // classes
 import Html from 'shared/Html';
-import ApiClient from 'shared/lib/ApiClient';
+import SimpleIsoFetch, { syncBindingsWithStore } from 'simple-iso-fetch';
 
 // functions
 import getRoutes from 'shared/routes';
 import createStore from 'shared/redux/store/createStore';
+
+// need to set base URL
+SimpleIsoFetch.setBaseUrl('http://localhost:3000/api');
+
 
 export default app => {
   app.use((req, res) => {
@@ -23,7 +27,7 @@ export default app => {
       // hot module replacement is enabled in the development env
       webpackIsomorphicTools.refresh();
     }
-    const client = new ApiClient(req);
+    const simpleIsoFetch = new SimpleIsoFetch(req);
     const memoryHistory = createHistory(req.originalUrl);
 
     // sends initial html to client
@@ -33,11 +37,18 @@ export default app => {
     }
 
     // check session to see if user is logged in, pass result into store as user object
-    client.get('/session').then(user =>
-      handleRender(createStore(memoryHistory, client, {auth: {user}})));
+    simpleIsoFetch.get('/session')
+      .then(({body: user}) =>
+        handleRender(createStore(memoryHistory, simpleIsoFetch,
+          { // initial state set here (with things that can only be retrieved server-side included)
+            auth: {user},
+            navigator: {userAgent: req.headers['user-agent']}
+          })))
+      .catch(err => console.log('session error', err));
 
     function handleRender(store) {
-      const history = syncHistoryWithStore(memoryHistory, store);
+      syncBindingsWithStore(simpleIsoFetch, store); // attach api response bindings to state
+      const history = syncHistoryWithStore(memoryHistory, store); // attach routing to state
 
       if (__DISABLE_SSR__) {
         hydrateOnClient(store);
@@ -52,7 +63,7 @@ export default app => {
           res.status(500);
           hydrateOnClient(store);
         } else if (renderProps) {
-          loadOnServer({...renderProps, store, helpers: {client}}).then(() => {
+          loadOnServer({...renderProps, store, helpers: {client: simpleIsoFetch}}).then(() => {
             res.status(200);
 
             global.navigator = {userAgent: req.headers['user-agent']};
